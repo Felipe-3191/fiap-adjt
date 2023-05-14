@@ -48,6 +48,9 @@ public class ContaCorrenteController {
 
     @DeleteMapping
     public String fecharConta(@RequestBody ContaCorrente conta){
+        if (repositorioContasCorrente.buscar(conta).isEmpty()) {
+            return "Conta não encontrada";
+        }
         repositorioContasCorrente.fechar(conta);
         return "Conta fechada com sucesso";
     }

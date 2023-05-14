@@ -28,4 +28,8 @@ public class RepositorioContasCorrente {
     contas.remove(conta);
 
     }
+
+    public Optional<ContaCorrente> buscar(ContaCorrente conta) {
+        return buscar(conta.getBanco(), conta.getAgencia(), conta.getNumero());
+    }
 }
