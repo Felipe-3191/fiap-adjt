@@ -3,6 +3,7 @@ package com.alura.alurabank.com.alura.alurabank.controller;
 import com.alura.alurabank.dominio.ContaCorrente;
 import com.alura.alurabank.dominio.Correntista;
 import com.alura.alurabank.dominio.MovimentacaoDeConta;
+import com.alura.alurabank.dominio.form.CorrentistaForm;
 import com.alura.alurabank.repositorio.RepositorioContasCorrente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,6 +36,8 @@ public class ContaCorrenteController {
 
     @PostMapping
     public ResponseEntity<ContaCorrente> criarNovaConta(@RequestBody Correntista correntista) {
+
+        //Correntista correntista = correntistaForm.toCorrentista();
 
         String banco = "333";
         String agencia = "4444";
