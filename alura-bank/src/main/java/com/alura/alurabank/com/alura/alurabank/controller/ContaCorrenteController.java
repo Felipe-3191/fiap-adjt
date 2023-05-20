@@ -35,9 +35,9 @@ public class ContaCorrenteController {
     }
 
     @PostMapping
-    public ResponseEntity<ContaCorrente> criarNovaConta(@RequestBody Correntista correntista) {
+    public ResponseEntity<ContaCorrente> criarNovaConta(@RequestBody CorrentistaForm correntistaForm) {
 
-        //Correntista correntista = correntistaForm.toCorrentista();
+        Correntista correntista = correntistaForm.toCorrentista();
 
         String banco = "333";
         String agencia = "4444";
