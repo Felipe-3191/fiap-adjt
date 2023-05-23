@@ -2,41 +2,30 @@ package com.alura.alurabank.dominio;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 
+@EqualsAndHashCode(
+        of = {"banco","agencia","numero"}
+)
 public class ContaCorrente {
+    @Getter
+    @Setter
     @JsonProperty
     private String banco;
+    @Getter
+    @Setter
    @JsonProperty
     private String agencia;
-   @JsonProperty
+    @Getter
+    @Setter
+    @JsonProperty
     private String numero;
 
-    public String getBanco() {
-        return banco;
-    }
-
-    public String getAgencia() {
-        return agencia;
-    }
-
-    public String getNumero() {
-        return numero;
-    }
-
-    public void setBanco(String banco) {
-        this.banco = banco;
-    }
-
-    public void setAgencia(String agencia) {
-        this.agencia = agencia;
-    }
-
-    public void setNumero(String numero) {
-        this.numero = numero;
-    }
 
     @JsonProperty
    private BigDecimal saldo;
@@ -72,16 +61,4 @@ public class ContaCorrente {
         this.saldo = operacao.executar(this.saldo,valor);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ContaCorrente that = (ContaCorrente) o;
-        return Objects.equals(banco, that.banco) && Objects.equals(agencia, that.agencia) && Objects.equals(numero, that.numero);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(banco, agencia, numero);
-    }
 }
