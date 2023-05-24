@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.ConstraintViolation;
 import javax.validation.Path;
 import javax.validation.Validation;
+import javax.validation.Validator;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
@@ -32,6 +33,8 @@ public class ContaCorrenteController {
     @Autowired
     private JMapper<ContaCorrente, ContaCorrenteForm> contaCorrenteMapper;
 
+    @Autowired
+    private Validator validator;
     @GetMapping
     public String consultarSaldo(@RequestParam(name="banco") String banco,
                                  @RequestParam(name="agencia") String agencia,
@@ -47,8 +50,7 @@ public class ContaCorrenteController {
 
     @PostMapping
     public ResponseEntity criarNovaConta(@RequestBody CorrentistaForm correntistaForm) {
-        Set<ConstraintViolation<CorrentistaForm>> violacoes = Validation.buildDefaultValidatorFactory().getValidator().validate(correntistaForm);
-        Map<Path, String> violacoesMap = violacoes.stream().collect(Collectors.toMap(violacao -> violacao.getPropertyPath(), violacao -> violacao.getMessage()));
+        Map<Path, String> violacoesMap = validar(correntistaForm);
 
         if (!violacoesMap.isEmpty()) {
             return ResponseEntity.badRequest().body(violacoesMap);
@@ -65,14 +67,26 @@ public class ContaCorrenteController {
 
     }
 
+    private <T> Map<Path, String> validar(T form) {
+        Set<ConstraintViolation<T>> violacoes = validator.validate(form);
+        Map<Path, String> violacoesMap = violacoes.stream().collect(Collectors.toMap(violacao -> violacao.getPropertyPath(), violacao -> violacao.getMessage()));
+        return violacoesMap;
+    }
+
     @DeleteMapping
-    public String fecharConta(@RequestBody ContaCorrenteForm contaForm){
+    public ResponseEntity fecharConta(@RequestBody ContaCorrenteForm contaForm){
+        Map<Path, String> violacoesMap = validar(contaForm);
+
+        if (!violacoesMap.isEmpty()) {
+            return ResponseEntity.badRequest().body(violacoesMap);
+        }
+
         ContaCorrente conta = contaCorrenteMapper.getDestination(contaForm);
         if (repositorioContasCorrente.buscar(conta).isEmpty()) {
-            return "Conta não encontrada";
+            return ResponseEntity.badRequest().body("Conta não encontrada");
         }
         repositorioContasCorrente.fechar(conta);
-        return "Conta fechada com sucesso";
+        return ResponseEntity.ok("Conta fechada com sucesso");
     }
 
     @PutMapping

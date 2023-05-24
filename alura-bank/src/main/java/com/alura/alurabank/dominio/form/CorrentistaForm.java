@@ -15,8 +15,7 @@ public class CorrentistaForm {
     private String cpf;
 
     @JsonProperty
-    @NotNull(message = "Nome do Correntista não pode ser nulo")
-    @NotBlank
+    @NotBlank(message = "nome do correntista é obrigatório")
     private String nome;
 
     public Correntista toCorrentista(){
